@@ -1,0 +1,984 @@
+/* ========== تنظیمات پایه ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, 'Vazir', system-ui, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #c8e6d9 0%, #a5d6a7 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+}
+
+/* ========== کامپوننت شیشه‌ای ========== */
+.glass-card {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(16px);
+    border-radius: 32px;
+    box-shadow: 0 8px 20px rgba(0, 30, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ========== صفحه احراز هویت ========== */
+.auth-container {
+    width: 100%;
+    max-width: 440px;
+    padding: 28px 20px;
+    text-align: center;
+    animation: fadeInUp 0.5s ease;
+}
+.auth-header h1 {
+    font-size: 1.8rem;
+    color: #1e4a2f;
+    margin-bottom: 8px;
+}
+.auth-header p {
+    font-size: 0.9rem;
+    color: #2d6a4f;
+    margin-bottom: 24px;
+}
+.auth-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 8px;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 6px 16px;
+    cursor: pointer;
+    border-radius: 60px;
+    transition: 0.2s;
+    color: #2d6a4f;
+    font-weight: 600;
+}
+.tab-btn.active {
+    background: #2e7d5e;
+    color: white;
+    box-shadow: 0 4px 12px rgba(46,125,94,0.3);
+}
+.auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+}
+.auth-form.active {
+    display: flex;
+}
+.auth-form input {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 60px;
+    background: rgba(255,255,255,0.8);
+    font-size: 0.95rem;
+    outline: none;
+}
+.auth-form input:focus {
+    background: white;
+    box-shadow: 0 0 0 2px #2e7d5e;
+}
+.auth-form button {
+    background: #2e7d5e;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 60px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.auth-form button:hover {
+    background: #1b5e3f;
+    transform: scale(1.02);
+}
+.error-msg {
+    color: #c62828;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+/* ========== چت اصلی ========== */
+.chat-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1400px;
+    height: calc(100vh - 24px);
+    gap: 12px;
+    flex-direction: row;
+}
+
+/* سایدبار (دسکتاپ) */
+.chat-sidebar {
+    width: 260px;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+/* نوار اطلاعات کاربر */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    flex-wrap: nowrap;
+}
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-color: #a5d6a7;
+    flex-shrink: 0;
+}
+.user-details {
+    flex: 1;
+    min-width: 0;
+}
+.user-details strong {
+    font-size: 1rem;
+    color: #1e3a2f;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.status {
+    font-size: 0.65rem;
+    background: #4caf50;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 30px;
+    display: inline-block;
+}
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    margin-left: 5px;
+    flex-shrink: 0;
+}
+.icon-btn:hover {
+    opacity: 1;
+}
+.logout-icon {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    opacity: 0.6;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+.logout-icon:hover {
+    opacity: 1;
+}
+
+/* لیست آنلاین‌ها */
+.online-users h4 {
+    font-size: 0.85rem;
+    color: #2d6a4f;
+    margin-bottom: 10px;
+}
+#online-list {
+    list-style: none;
+}
+#online-list li {
+    padding: 6px 0;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.online-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+.private-chat-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-right: auto;
+}
+.private-chat-btn:hover {
+    opacity: 1;
+}
+
+/* دکمه‌ها */
+.clear-all-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 8px;
+    margin-top: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+.theme-selector {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    background: rgba(0,0,0,0.05);
+    padding: 6px 10px;
+    border-radius: 50px;
+}
+.theme-btn {
+    background: rgba(255,255,255,0.6);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 40px;
+    cursor: pointer;
+}
+.theme-btn.active {
+    background: #2e7d5e;
+    color: white;
+}
+
+/* بخش اصلی چت */
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+.private-chat-bar {
+    background: rgba(46,125,94,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 60px;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+}
+.close-private {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #c62828;
+}
+.search-bar {
+    padding: 6px 16px;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(8px);
+    border-radius: 60px;
+    position: relative;
+}
+#search-input {
+    width: 100%;
+    padding: 8px 32px 8px 12px;
+    border: none;
+    border-radius: 60px;
+    background: rgba(255,255,255,0.9);
+    font-size: 0.85rem;
+    outline: none;
+}
+#clear-search {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* ناحیه پیام‌ها */
+.messages-area {
+    flex: 1;
+    background: rgba(255,245,235,0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 32px;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.date-header {
+    text-align: center;
+    margin: 12px 0 6px;
+    font-size: 0.7rem;
+    color: #2e7d5e;
+    background: rgba(46,125,94,0.15);
+    backdrop-filter: blur(4px);
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 40px;
+    align-self: center;
+}
+.message-bubble {
+    max-width: 75%;
+    align-self: flex-start;
+    background: rgba(255,255,255,0.9);
+    border-radius: 24px;
+    padding: 10px 16px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: transform 0.05s ease;
+}
+.message-bubble.own {
+    align-self: flex-end;
+    background: rgba(210,240,210,0.9);
+    border-bottom-right-radius: 6px;
+}
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 0.7rem;
+    margin-bottom: 6px;
+    color: #2e7d5e;
+}
+.message-username {
+    font-weight: 800;
+}
+.message-time {
+    font-size: 0.6rem;
+    opacity: 0.6;
+}
+.message-text {
+    font-size: 0.9rem;
+    word-break: break-word;
+    line-height: 1.4;
+}
+.message-sticker {
+    font-size: 2.5rem;
+    display: inline-block;
+    animation: bounce 0.4s ease;
+}
+.message-sticker img {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 12px;
+}
+.message-reply {
+    background: rgba(0,0,0,0.04);
+    border-right: 3px solid #2e7d5e;
+    padding: 5px 10px;
+    margin-bottom: 8px;
+    border-radius: 16px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.message-reply img {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+}
+.message-attachment {
+    margin-top: 8px;
+}
+.message-attachment img,
+.message-attachment video {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+.message-actions {
+    float: left;
+    display: flex;
+    gap: 6px;
+    margin-left: 8px;
+}
+.edit-msg, .delete-msg, .reply-action, .pin-action, .copy-msg {
+    background: none;
+    border: none;
+    font-size: 0.7rem;
+    cursor: pointer;
+    opacity: 0.5;
+}
+.edit-msg:hover, .delete-msg:hover, .reply-action:hover, .pin-action:hover, .copy-msg:hover {
+    opacity: 1;
+}
+.edited-badge {
+    font-size: 0.6rem;
+    color: #888;
+    margin-right: 6px;
+}
+.message-reactions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+.reaction-btn {
+    background: rgba(0,0,0,0.05);
+    border: none;
+    border-radius: 30px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+.reaction-btn.active {
+    background: #2e7d5e;
+    color: white;
+}
+.reaction-count {
+    font-size: 0.6rem;
+    margin-left: 4px;
+}
+.message-deleted-admin {
+    background: rgba(200,100,100,0.2);
+    border-right: 3px solid #c62828;
+}
+.message-deleted-admin .message-text {
+    color: #c62828;
+    font-style: italic;
+}
+
+/* پنل ورودی */
+.input-panel {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.reply-indicator {
+    background: rgba(46,125,94,0.2);
+    border-radius: 50px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+}
+.reply-thumb img {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.input-row {
+    display: flex;
+    gap: 12px;
+}
+#message-text {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 60px;
+    background: rgba(255,255,255,0.9);
+    font-size: 0.9rem;
+    outline: none;
+}
+#message-text:focus {
+    background: white;
+    box-shadow: 0 0 0 2px #2e7d5e;
+}
+.send-btn {
+    background: #2e7d5e;
+    border: none;
+    padding: 0 20px;
+    border-radius: 60px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.input-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+}
+.action-btn {
+    background: rgba(46,125,94,0.2);
+    padding: 6px 14px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    border: none;
+}
+.action-btn:hover {
+    background: #2e7d5e;
+    color: white;
+}
+.typing-status {
+    background: #ffcc80;
+    padding: 4px 12px;
+    border-radius: 60px;
+    font-size: 0.7rem;
+}
+.hidden {
+    display: none;
+}
+.upload-progress {
+    margin-top: 6px;
+    background: #e0e0e0;
+    border-radius: 60px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 8px;
+}
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #2e7d5e;
+    transition: width 0.2s;
+}
+#progress-percent {
+    font-size: 0.65rem;
+}
+
+/* دکمه‌های شناور */
+.floating-buttons {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: flex;
+    gap: 12px;
+    z-index: 200;
+}
+.float-btn {
+    background: #2e7d5e;
+    color: white;
+    border: none;
+    border-radius: 60px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.float-btn:hover {
+    background: #1b5e3f;
+    transform: scale(1.02);
+}
+
+/* مودال‌ها */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal.hidden {
+    display: none;
+}
+.modal-content {
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    padding: 20px;
+    position: relative;
+    overflow-y: auto;
+}
+.modal-large {
+    max-width: 600px;
+}
+.close-modal {
+    position: absolute;
+    top: 12px;
+    left: 18px;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+#pinned-modal-content {
+    background: rgba(255,255,240,0.5);
+    border-radius: 24px;
+    padding: 12px;
+    margin: 16px 0;
+}
+.poll-item-modal {
+    background: rgba(255,255,255,0.7);
+    border-radius: 24px;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+.poll-question-modal {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.poll-option-modal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 40px;
+}
+.poll-option-modal:hover {
+    background: rgba(0,0,0,0.05);
+}
+.poll-option-bar-modal {
+    flex: 1;
+    height: 6px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.poll-option-fill-modal {
+    height: 100%;
+    background: #2e7d5e;
+    width: 0%;
+}
+.poll-option-percent-modal {
+    min-width: 40px;
+    font-size: 0.65rem;
+}
+.delete-poll-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 4px 10px;
+    cursor: pointer;
+    float: left;
+    margin-top: 8px;
+    font-size: 0.7rem;
+}
+.small-btn {
+    background: #2e7d5e;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 6px 14px;
+    cursor: pointer;
+}
+#poll-options-list input {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 60px;
+    border: none;
+}
+
+/* بازی */
+.game-choices {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+.game-choice-btn {
+    background: #2e7d5e;
+    color: white;
+    border: none;
+    border-radius: 60px;
+    padding: 10px 16px;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+.game-choice-btn:hover {
+    transform: scale(1.05);
+    background: #1b5e3f;
+}
+#game-status-msg {
+    margin-top: 12px;
+    font-size: 0.85rem;
+}
+
+/* استیکرها */
+.sticker-panel .sticker-img {
+    width: 60px;
+    cursor: pointer;
+    transition: 0.1s;
+    margin: 5px;
+}
+.sticker-panel .sticker-img:hover {
+    transform: scale(1.1);
+}
+.emoji-panel, .sticker-panel {
+    position: absolute;
+    bottom: 70px;
+    left: 20px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-radius: 32px;
+    padding: 12px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    border: 1px solid rgba(255,255,255,0.6);
+    width: 280px;
+}
+.emoji-panel.hidden, .sticker-panel.hidden {
+    display: none;
+}
+.emoji {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: 0.1s;
+}
+.emoji:hover {
+    transform: scale(1.2);
+}
+
+/* ========== ریسپانسیو برای موبایل و تبلت ========== */
+@media (max-width: 900px) {
+    body {
+        padding: 8px;
+    }
+    .chat-wrapper {
+        flex-direction: column;
+        height: auto;
+        min-height: 95vh;
+        gap: 10px;
+    }
+    /* سایدبار عمودی */
+    .chat-sidebar {
+        width: 100%;
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+    /* ردیف اطلاعات کاربر (یک خطی) */
+    .user-info {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 0;
+        border-bottom: none;
+        order: 1;
+    }
+    .avatar {
+        width: 40px;
+        height: 40px;
+    }
+    .user-details strong {
+        font-size: 0.9rem;
+    }
+    .status {
+        font-size: 0.6rem;
+    }
+    .logout-icon {
+        font-size: 1.2rem;
+        margin-left: auto;
+    }
+    /* دکمه پاک کردن کل چت */
+    .clear-all-btn {
+        order: 2;
+        width: 100%;
+        margin-top: 0;
+    }
+    /* دکمه بازی */
+    #game-btn {
+        order: 3;
+        width: 100%;
+        margin-top: 0;
+    }
+    /* انتخابگر تم */
+    .theme-selector {
+        order: 4;
+        width: 100%;
+        margin-top: 0;
+        justify-content: center;
+    }
+    /* آنلاین‌ها */
+    .online-users {
+        order: 5;
+        width: 100%;
+        margin-top: 0;
+    }
+    .online-users h4 {
+        margin-bottom: 4px;
+    }
+    #online-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    #online-list li {
+        padding: 4px 8px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 40px;
+        font-size: 0.75rem;
+        width: auto;
+    }
+    .chat-main {
+        min-height: 60vh;
+    }
+    .messages-area {
+        padding: 12px;
+    }
+    .message-bubble {
+        max-width: 85%;
+        padding: 8px 12px;
+    }
+    .input-panel {
+        padding: 10px 12px;
+    }
+    .input-row {
+        gap: 8px;
+    }
+    #message-text {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+    .send-btn {
+        padding: 0 16px;
+    }
+    .action-btn {
+        padding: 5px 12px;
+        font-size: 0.7rem;
+    }
+    .floating-buttons {
+        bottom: 15px;
+        right: 15px;
+        gap: 8px;
+    }
+    .float-btn {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+    }
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        padding: 16px;
+    }
+    .emoji-panel, .sticker-panel {
+        width: 90%;
+        left: 5%;
+        bottom: 65px;
+    }
+    .sticker-img {
+        width: 50px;
+    }
+    .private-chat-bar {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+    }
+}
+
+/* تنظیمات بیشتر برای موبایل‌های کوچک */
+@media (max-width: 480px) {
+    .user-info {
+        gap: 6px;
+    }
+    .avatar {
+        width: 36px;
+        height: 36px;
+    }
+    .user-details strong {
+        font-size: 0.85rem;
+    }
+    .logout-icon {
+        font-size: 1.1rem;
+    }
+    .message-bubble {
+        max-width: 90%;
+    }
+    .message-header {
+        font-size: 0.65rem;
+    }
+    .message-text {
+        font-size: 0.8rem;
+    }
+    .input-actions {
+        gap: 6px;
+    }
+    .action-btn {
+        padding: 4px 10px;
+        font-size: 0.65rem;
+    }
+    .floating-buttons {
+        bottom: 12px;
+        right: 12px;
+    }
+    .float-btn {
+        padding: 5px 10px;
+        font-size: 0.65rem;
+    }
+    .emoji-panel, .sticker-panel {
+        width: 95%;
+        left: 2.5%;
+    }
+    .emoji {
+        font-size: 1.5rem;
+    }
+}
+
+/* ========== تم تیره ========== */
+body.dark-theme {
+    background: linear-gradient(135deg, #1a2a1f, #0f1f12);
+}
+body.dark-theme .glass-card,
+body.dark-theme .messages-area,
+body.dark-theme .input-panel {
+    background: rgba(30,30,30,0.7);
+    color: #eee;
+    border-color: rgba(255,255,255,0.2);
+}
+body.dark-theme .message-bubble {
+    background: #2a2a2a;
+    color: #ddd;
+}
+body.dark-theme .message-bubble.own {
+    background: #2c5e3a;
+}
+body.dark-theme .auth-form input {
+    background: #3a3a3a;
+    color: white;
+}
+body.dark-theme .search-bar,
+body.dark-theme .float-btn {
+    background: #2e7d5e;
+}
+body.dark-theme .online-users li {
+    background: rgba(255,255,255,0.1);
+}
+
+/* ========== انیمیشن‌ها ========== */
+@keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
