@@ -1,0 +1,11 @@
+{
+  "name": "Unique Taha | یونیک طاها",
+  "short_name": "Unique Taha",
+  "description": "Official site of Unique Taha, Iranian PUBG Mobile streamer",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}
