@@ -1073,6 +1073,8 @@
             margin-top: 4px;
         }
         .copy-link-button {
+            position: relative;
+            overflow: hidden;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1095,18 +1097,55 @@
             box-shadow: 0 0 18px rgba(255, 178, 26, 0.16);
             transform: translateY(-2px);
         }
-        .copy-link-button svg { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; }
-        .copy-link-button .copy-success-icon { display: none; }
+        .copy-link-button svg {
+            width: 17px;
+            height: 17px;
+            flex: none;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            transition: opacity 0.2s ease, transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .copy-link-button .copy-success-icon {
+            position: absolute;
+            inset-inline-start: 12px;
+            top: 50%;
+            opacity: 0;
+            transform: translateY(-50%) scale(0.45) rotate(-35deg);
+            pointer-events: none;
+        }
         .copy-link-button.is-copied { border-color: #70e6a1; color: #a8f5c5; }
-        .copy-link-button.is-copied .copy-default-icon { display: none; }
-        .copy-link-button.is-copied .copy-success-icon { display: block; }
-        .copy-link-button.is-copied .copy-success-icon path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: copyCheck 0.35s ease forwards; }
-        @keyframes copyCheck { to { stroke-dashoffset: 0; } }
-        .copy-link-feedback { flex-basis: 100%; min-height: 1.4em; margin: 0 !important; color: #a8f5c5 !important; font-size: 0.82rem; }
-        .copy-link-feedback:empty { display: none; }
+        .copy-link-button.is-copied .copy-default-icon { opacity: 0; transform: scale(0.55) rotate(30deg); }
+        .copy-link-button.is-copied .copy-success-icon {
+            opacity: 1;
+            transform: translateY(-50%) scale(1) rotate(0);
+        }
+        .copy-link-button .copy-success-icon path {
+            stroke-dasharray: 24;
+            stroke-dashoffset: 24;
+            transition: stroke-dashoffset 0.36s ease 0.08s;
+        }
+        .copy-link-button.is-copied .copy-success-icon path { stroke-dashoffset: 0; }
+        .copy-link-button:disabled { cursor: wait; }
+        .copy-link-feedback {
+            display: block;
+            flex-basis: 100%;
+            min-height: 1.4em;
+            margin: 0 !important;
+            color: #a8f5c5 !important;
+            font-size: 0.82rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-3px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+        }
+        .copy-link-feedback.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        .copy-link-feedback.is-error { color: #ffb3b8 !important; }
         @media (prefers-reduced-motion: reduce) {
             .copy-link-button { transition: none; }
-            .copy-link-button.is-copied .copy-success-icon path { animation: none; stroke-dashoffset: 0; }
+            .copy-link-button svg,
+            .copy-link-feedback { transition: none; }
+            .copy-link-button .copy-success-icon path { transition: none; }
         }
 
         .faq-item { border-top: 1px solid rgba(255, 60, 60, 0.15); padding: 16px 0; }
@@ -1770,6 +1809,52 @@
             .hit, .killfeed { display: none; }
         }
 
+        .social-card-actions { flex-wrap: wrap; gap: 10px; }
+        .social-card-actions > a,
+        .social-card-actions > .copy-link-button {
+            box-sizing: border-box;
+            display: inline-flex;
+            flex: 1 1 0;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+            min-height: 46px;
+            margin: 0;
+            padding: 9px 10px;
+            clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+            font-size: 0.86rem;
+            font-weight: 700;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .social-card-actions > a {
+            border: 1px solid rgba(255, 80, 90, 0.65);
+        }
+
+        .social-card-actions > .copy-link-button {
+            border: 1px solid rgba(255, 178, 26, 0.55);
+            background: linear-gradient(135deg, rgba(104, 18, 24, 0.96), rgba(38, 10, 13, 0.98));
+        }
+
+        .social-card-actions > a:hover,
+        .social-card-actions > .copy-link-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .social-card-actions > .copy-link-button:hover {
+            border-color: var(--amber);
+            background: linear-gradient(135deg, rgba(137, 25, 31, 0.98), rgba(55, 12, 16, 0.98));
+        }
+
+        .social-card-actions > .copy-link-button.is-copied {
+            border-color: #70e6a1;
+            color: #a8f5c5;
+        }
+
+        .social-card-actions .copy-link-button svg { width: 16px; height: 16px; }
+
         /* keyboard focus must stay visible on clipped shapes (outline inside the box) */
         .social-card a:focus-visible,
         .vpn-link-btn:focus-visible,
@@ -2233,20 +2318,41 @@
                 const link = actions && actions.querySelector('a[href]');
                 const feedback = actions && actions.querySelector('.copy-link-feedback');
 
-                if (!link || !feedback) return;
+                if (!link || !feedback || button.disabled) return;
 
+                clearTimeout(feedbackTimer);
+                button.disabled = true;
+                button.setAttribute('aria-busy', 'true');
+                button.classList.remove('is-copied');
+                feedback.classList.remove('is-error');
                 try {
                     await copyText(link.href);
                     button.classList.add('is-copied');
+                    feedback.classList.add('is-visible');
                     feedback.textContent = button.dataset.copiedLabel || 'لینک کپی شد';
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof button.animate === 'function') {
+                        button.animate(
+                            [
+                                { transform: 'translateY(0) scale(1)' },
+                                { transform: 'translateY(-3px) scale(1.045)' },
+                                { transform: 'translateY(0) scale(1)' }
+                            ],
+                            { duration: 420, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' }
+                        );
+                    }
                 } catch (error) {
                     console.error('Could not copy social link:', error);
                     button.classList.remove('is-copied');
+                    feedback.classList.add('is-visible', 'is-error');
                     feedback.textContent = 'کپی خودکار در این مرورگر انجام نشد';
+                } finally {
+                    button.disabled = false;
+                    button.removeAttribute('aria-busy');
                 }
-                clearTimeout(feedbackTimer);
+
                 feedbackTimer = setTimeout(() => {
                     button.classList.remove('is-copied');
+                    feedback.classList.remove('is-visible', 'is-error');
                     feedback.textContent = '';
                 }, 2200);
             });
