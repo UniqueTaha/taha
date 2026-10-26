@@ -1064,6 +1064,50 @@
         .info-section strong { color: #fff; }
         .info-section a { color: var(--red-soft); text-underline-offset: 4px; transition: color 0.2s; }
         .info-section a:hover { color: #fff; }
+        .social-card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .copy-link-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            min-height: 42px;
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 178, 26, 0.5);
+            border-radius: 0;
+            color: #fff;
+            background: rgba(255, 178, 26, 0.08);
+            font: inherit;
+            font-size: 0.9rem;
+            line-height: 1.35;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .copy-link-button:hover {
+            border-color: var(--amber);
+            background: rgba(255, 178, 26, 0.16);
+            box-shadow: 0 0 18px rgba(255, 178, 26, 0.16);
+            transform: translateY(-2px);
+        }
+        .copy-link-button svg { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; }
+        .copy-link-button .copy-success-icon { display: none; }
+        .copy-link-button.is-copied { border-color: #70e6a1; color: #a8f5c5; }
+        .copy-link-button.is-copied .copy-default-icon { display: none; }
+        .copy-link-button.is-copied .copy-success-icon { display: block; }
+        .copy-link-button.is-copied .copy-success-icon path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: copyCheck 0.35s ease forwards; }
+        @keyframes copyCheck { to { stroke-dashoffset: 0; } }
+        .copy-link-feedback { flex-basis: 100%; min-height: 1.4em; margin: 0 !important; color: #a8f5c5 !important; font-size: 0.82rem; }
+        .copy-link-feedback:empty { display: none; }
+        @media (prefers-reduced-motion: reduce) {
+            .copy-link-button { transition: none; }
+            .copy-link-button.is-copied .copy-success-icon path { animation: none; stroke-dashoffset: 0; }
+        }
 
         .faq-item { border-top: 1px solid rgba(255, 60, 60, 0.15); padding: 16px 0; }
         .faq-item:first-of-type { border-top: none; }
@@ -1729,6 +1773,7 @@
         /* keyboard focus must stay visible on clipped shapes (outline inside the box) */
         .social-card a:focus-visible,
         .vpn-link-btn:focus-visible,
+        .copy-link-button:focus-visible,
         .modal-btn:focus-visible,
         .scroll-top:focus-visible {
             outline: 2px solid #fff;
@@ -1780,7 +1825,15 @@
                 <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
                 <h2 style="font-size:1.5rem;margin-bottom:10px">اینستاگرام</h2>
                 <p>گیم پلی کوتاه و استوری ها</p>
-                <a href="https://www.instagram.com/unique__taha" target="_blank" rel="me noopener">مشاهده پروفایل</a>
+                <div class="social-card-actions">
+                    <a href="https://www.instagram.com/unique__taha" target="_blank" rel="me noopener">مشاهده پروفایل</a>
+                    <button class="copy-link-button" type="button" aria-label="کپی لینک اینستاگرام" data-copied-label="لینک اینستاگرام کپی شد">
+                        <svg class="copy-default-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+                        <svg class="copy-success-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        <span>کپی لینک</span>
+                    </button>
+                    <span class="copy-link-feedback" role="status" aria-live="polite"></span>
+                </div>
             </div>
 
             <div class="social-card">
@@ -1788,7 +1841,15 @@
                 <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></span>
                 <h2 style="font-size:1.5rem;margin-bottom:10px">یوتیوب</h2>
                 <p>🔥 ویدیوهای گیم‌پلی، لایو استریم و ترفندها</p>
-                <a href="https://www.youtube.com/@uniquetaha" target="_blank" rel="me noopener">مشاهده کانال</a>
+                <div class="social-card-actions">
+                    <a href="https://www.youtube.com/@uniquetaha" target="_blank" rel="me noopener">مشاهده کانال</a>
+                    <button class="copy-link-button" type="button" aria-label="کپی لینک یوتیوب" data-copied-label="لینک یوتیوب کپی شد">
+                        <svg class="copy-default-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+                        <svg class="copy-success-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        <span>کپی لینک</span>
+                    </button>
+                    <span class="copy-link-feedback" role="status" aria-live="polite"></span>
+                </div>
             </div>
 
             <div class="social-card">
@@ -1796,7 +1857,15 @@
                 <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="4.5" width="18" height="12.5" rx="2.5"/><path d="M8 20.5h8M12 17v3.5"/><path d="M10.5 8.4v5.2l4-2.6z" fill="currentColor"/></svg></span>
                 <h2 style="font-size:1.5rem;margin-bottom:10px">آپارات</h2>
                 <p>🔥 لایو استریم پابجی موبایل و ویدیوهای گیم‌پلی</p>
-                <a class="vpn-link-btn" href="https://www.aparat.com/uniquetaha" rel="me noopener" data-url="https://www.aparat.com/uniquetaha">مشاهده کانال</a>
+                <div class="social-card-actions">
+                    <a class="vpn-link-btn" href="https://www.aparat.com/uniquetaha" rel="me noopener" data-url="https://www.aparat.com/uniquetaha">مشاهده کانال</a>
+                    <button class="copy-link-button" type="button" aria-label="کپی لینک آپارات" data-copied-label="لینک آپارات کپی شد">
+                        <svg class="copy-default-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+                        <svg class="copy-success-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        <span>کپی لینک</span>
+                    </button>
+                    <span class="copy-link-feedback" role="status" aria-live="polite"></span>
+                </div>
             </div>
 
             <div class="social-card">
@@ -1804,7 +1873,15 @@
                 <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20.5l1.6-4.9A8.5 8.5 0 1 1 21 11.5z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke-width="2.6"/></svg></span>
                 <h2 style="font-size:1.5rem;margin-bottom:10px">روبیکا</h2>
                 <p>❤️ نت اگر قط شد روبیکا‌ هستیم</p>
-                <a href="https://rubika.ir/Unique_Taha" target="_blank" rel="me noopener">مشاهده کانال</a>
+                <div class="social-card-actions">
+                    <a href="https://rubika.ir/Unique_Taha" target="_blank" rel="me noopener">مشاهده کانال</a>
+                    <button class="copy-link-button" type="button" aria-label="کپی لینک روبیکا" data-copied-label="لینک روبیکا کپی شد">
+                        <svg class="copy-default-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+                        <svg class="copy-success-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        <span>کپی لینک</span>
+                    </button>
+                    <span class="copy-link-feedback" role="status" aria-live="polite"></span>
+                </div>
             </div>
 
             <div class="social-card">
@@ -1812,7 +1889,15 @@
                 <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-8-4.9-9.5-10C1.6 7.8 3.6 5 6.7 5c2 0 3.6 1.1 5.3 3.2C13.7 6.1 15.3 5 17.3 5c3.1 0 5.1 2.8 4.2 6C20 16.1 12 21 12 21z"/></svg></span>
                 <h2 style="font-size:1.5rem;margin-bottom:10px">حمایت مالی (دونیت)</h2>
                 <p>❤️ هر مبلغی دلگرمیه و کمک می‌کنه بیشتر با شما باشم</p>
-                <a class="vpn-link-btn" href="https://reymit.ir/uniquetaha" rel="noopener" data-url="https://reymit.ir/uniquetaha">حمایت کنید</a>
+                <div class="social-card-actions">
+                    <a class="vpn-link-btn" href="https://reymit.ir/uniquetaha" rel="noopener" data-url="https://reymit.ir/uniquetaha">حمایت کنید</a>
+                    <button class="copy-link-button" type="button" aria-label="کپی لینک حمایت مالی" data-copied-label="لینک حمایت مالی کپی شد">
+                        <svg class="copy-default-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+                        <svg class="copy-success-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        <span>کپی لینک</span>
+                    </button>
+                    <span class="copy-link-feedback" role="status" aria-live="polite"></span>
+                </div>
             </div>
 
             <div class="social-card">
@@ -1820,7 +1905,15 @@
                 <span class="social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M21.5 3.5 2.8 10.7l5.6 2.2 2.1 6.6 3.3-4 4.9 3.6z"/><path d="M8.4 12.9l13.1-9.4"/></svg></span>
                 <h2 style="font-size:1.5rem;margin-bottom:10px">تلگرام</h2>
                 <p>اخبار و خودمونی ها</p>
-                <a href="https://t.me/Taha_1_99" target="_blank" rel="me noopener">مشاهده پروفایل</a>
+                <div class="social-card-actions">
+                    <a href="https://t.me/Taha_1_99" target="_blank" rel="me noopener">مشاهده پروفایل</a>
+                    <button class="copy-link-button" type="button" aria-label="کپی لینک تلگرام" data-copied-label="لینک تلگرام کپی شد">
+                        <svg class="copy-default-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+                        <svg class="copy-success-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                        <span>کپی لینک</span>
+                    </button>
+                    <span class="copy-link-feedback" role="status" aria-live="polite"></span>
+                </div>
             </div>
         </nav>
         <p class="hotkey-hint">میان‌بر: با زدن کلیدهای <kbd>1</kbd> تا <kbd>6</kbd> روی کیبورد، هر کارت رو سریع باز کن</p>
@@ -2109,6 +2202,54 @@
         window.setInterval(refreshLiveStatus, 60000);
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) refreshLiveStatus();
+        });
+
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return;
+                } catch (error) {
+                    console.warn('Clipboard API unavailable; trying the fallback:', error.message);
+                }
+            }
+
+            const input = document.createElement('textarea');
+            input.value = text;
+            input.setAttribute('readonly', '');
+            input.style.position = 'fixed';
+            input.style.opacity = '0';
+            document.body.appendChild(input);
+            input.select();
+            const copied = document.execCommand('copy');
+            input.remove();
+            if (!copied) throw new Error('Clipboard copy is unavailable');
+        }
+
+        document.querySelectorAll('.copy-link-button').forEach(button => {
+            let feedbackTimer;
+            button.addEventListener('click', async () => {
+                const actions = button.closest('.social-card-actions');
+                const link = actions && actions.querySelector('a[href]');
+                const feedback = actions && actions.querySelector('.copy-link-feedback');
+
+                if (!link || !feedback) return;
+
+                try {
+                    await copyText(link.href);
+                    button.classList.add('is-copied');
+                    feedback.textContent = button.dataset.copiedLabel || 'لینک کپی شد';
+                } catch (error) {
+                    console.error('Could not copy social link:', error);
+                    button.classList.remove('is-copied');
+                    feedback.textContent = 'کپی خودکار در این مرورگر انجام نشد';
+                }
+                clearTimeout(feedbackTimer);
+                feedbackTimer = setTimeout(() => {
+                    button.classList.remove('is-copied');
+                    feedback.textContent = '';
+                }, 2200);
+            });
         });
 
         // Handle VPN link buttons
