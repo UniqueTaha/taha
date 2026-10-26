@@ -1,4 +1,0 @@
-name = "uniquetaha-live-status"
-main = "live-status-worker.js"
-compatibility_date = "2026-10-26"
-workers_dev = true
