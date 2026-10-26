@@ -1463,6 +1463,35 @@
             background: linear-gradient(135deg, #ff2a36 0%, #a3000d 100%);
         }
 
+        .live-status-dot {
+            width: 9px;
+            height: 9px;
+            flex: none;
+            border-radius: 50%;
+            background: var(--amber);
+            box-shadow: 0 0 0 3px rgba(255, 178, 26, 0.2);
+        }
+
+        .hud-chips li[data-state="live"] .live-status-dot {
+            background: var(--red-500);
+            box-shadow: 0 0 0 3px rgba(255, 42, 54, 0.24);
+            animation: recBlink 1.2s steps(2, start) infinite;
+        }
+
+        .hud-chips li[data-state="offline"] .live-status-dot {
+            background: #8a929e;
+            box-shadow: 0 0 0 3px rgba(138, 146, 158, 0.18);
+        }
+
+        .live-cta[data-state="offline"] {
+            background: linear-gradient(135deg, #555b66 0%, #292d35 100%);
+        }
+
+        .live-cta[data-state="unknown"],
+        .live-cta[data-state="checking"] {
+            background: linear-gradient(135deg, #8f6515 0%, #59400e 100%);
+        }
+
         /* ---------- HUD panels (cards + info sections) ---------- */
         .social-card,
         .info-section {
@@ -1729,13 +1758,16 @@
             <svg class="reticle" viewBox="0 0 400 400" aria-hidden="true" focusable="false"><circle cx="200" cy="200" r="120"/><circle cx="200" cy="200" r="170" stroke-dasharray="4 10"/><path d="M200 8v64M200 328v64M8 200h64M328 200h64"/></svg>
             <h1><img class="site-logo" src="logo.png" alt="لوگوی یونیک طاها"><span class="site-name">Unique Taha</span><span class="sr-only">| یونیک طاها | UniqueTaha</span></h1>
             <p class="subtitle">یونیک طاها؛ استریمر پابجی موبایل </p>
-            <p class="tagline">لایو استریم و گیم‌پلی PUBG Mobile در آپارات و. همه شبکه‌های رسمی Unique Taha یک‌جا.</p>
+            <p class="tagline">پخش زنده و ویدیوهای PUBG Mobile در آپارات و یوتیوب؛ همهٔ شبکه‌های رسمی یونیک طاها در یک‌جا.</p>
             <ul class="hud-chips">
                 <li>پابجی موبایل</li>
                 <li>استریمر ایرانی</li>
-                <li><span class="rec-dot red" aria-hidden="true"></span>لایو در آپارات</li>
+                <li id="liveStatus" data-state="checking" role="status" aria-live="polite">
+                    <span class="live-status-dot" aria-hidden="true"></span>
+                    <span id="liveStatusText">در حال بررسی وضعیت لایو...</span>
+                </li>
             </ul>
-            <div class="cta-wrap"><a class="live-cta vpn-link-btn" href="https://www.aparat.com/uniquetaha/live" rel="noopener" data-url="https://www.aparat.com/uniquetaha/live"><span class="rec-dot" aria-hidden="true"></span>تماشای لایو در آپارات</a></div>
+            <div class="cta-wrap"><a id="liveCta" class="live-cta vpn-link-btn" href="https://www.aparat.com/uniquetaha/live" rel="noopener" data-url="https://www.aparat.com/uniquetaha/live" data-state="checking"><span class="live-status-dot" aria-hidden="true"></span><span id="liveCtaText">بررسی وضعیت آپارات...</span></a></div>
         </header>
 
         <nav class="social-links" aria-label="شبکه‌های اجتماعی یونیک طاها">
@@ -1958,6 +1990,60 @@
         const confirmBtn = document.getElementById('confirmBtn');
         const cancelBtn = document.getElementById('cancelBtn');
         const vpnButtons = document.querySelectorAll('.vpn-link-btn');
+
+        // The Worker keeps Aparat's API request server-side, avoiding browser CORS restrictions.
+        const LIVE_STATUS_ENDPOINT = 'https://uniquetaha-live-status.tahakazrwny.workers.dev/live-status';
+        const liveStatus = document.getElementById('liveStatus');
+        const liveStatusText = document.getElementById('liveStatusText');
+        const liveCta = document.getElementById('liveCta');
+        const liveCtaText = document.getElementById('liveCtaText');
+        let liveStatusRequestPending = false;
+
+        function renderLiveStatus(status) {
+            const labels = {
+                live: { status: '🔴 لایو در حال برگزاری است', cta: 'تماشای لایو در آپارات' },
+                offline: { status: '⚫ در حال حاضر آفلاین است', cta: 'مشاهدهٔ کانال آپارات' },
+                unknown: { status: 'وضعیت لایو فعلاً در دسترس نیست', cta: 'رفتن به کانال آپارات' },
+                checking: { status: 'در حال بررسی وضعیت لایو...', cta: 'بررسی وضعیت آپارات...' }
+            };
+            const label = labels[status] || labels.unknown;
+
+            liveStatus.dataset.state = status in labels ? status : 'unknown';
+            liveStatusText.textContent = label.status;
+            liveCta.dataset.state = status in labels ? status : 'unknown';
+            liveCtaText.textContent = label.cta;
+        }
+
+        async function refreshLiveStatus() {
+            if (liveStatusRequestPending || document.hidden) return;
+            liveStatusRequestPending = true;
+
+            try {
+                const response = await fetch(LIVE_STATUS_ENDPOINT, {
+                    headers: { Accept: 'application/json' },
+                    cache: 'no-store'
+                });
+                if (!response.ok) throw new Error(`Live status request failed: ${response.status}`);
+
+                const result = await response.json();
+                if (result.status !== 'live' && result.status !== 'offline') {
+                    throw new Error('Live status endpoint returned an invalid status');
+                }
+                renderLiveStatus(result.status);
+            } catch (error) {
+                renderLiveStatus('unknown');
+                console.error('Unable to refresh Aparat live status:', error);
+            } finally {
+                liveStatusRequestPending = false;
+            }
+        }
+
+        renderLiveStatus('checking');
+        refreshLiveStatus();
+        window.setInterval(refreshLiveStatus, 60000);
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) refreshLiveStatus();
+        });
 
         // Handle VPN link buttons
         vpnButtons.forEach(btn => {
