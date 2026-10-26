@@ -1998,6 +1998,8 @@
         const liveCta = document.getElementById('liveCta');
         const liveCtaText = document.getElementById('liveCtaText');
         let liveStatusRequestPending = false;
+        let liveFeedStatus = 'checking';
+        let refreshKillFeed = null;
 
         function renderLiveStatus(status) {
             const labels = {
@@ -2006,11 +2008,18 @@
                 unknown: { status: 'وضعیت لایو فعلاً در دسترس نیست', cta: 'رفتن به کانال آپارات' },
                 checking: { status: 'در حال بررسی وضعیت لایو...', cta: 'بررسی وضعیت آپارات...' }
             };
-            const label = labels[status] || labels.unknown;
+            const normalizedStatus = status in labels ? status : 'unknown';
+            const label = labels[normalizedStatus];
 
-            liveStatus.dataset.state = status in labels ? status : 'unknown';
+            if (normalizedStatus !== liveFeedStatus) {
+                liveFeedStatus = normalizedStatus;
+                document.getElementById('killfeed').replaceChildren();
+                if (refreshKillFeed) refreshKillFeed();
+            }
+
+            liveStatus.dataset.state = normalizedStatus;
             liveStatusText.textContent = label.status;
-            liveCta.dataset.state = status in labels ? status : 'unknown';
+            liveCta.dataset.state = normalizedStatus;
             liveCtaText.textContent = label.cta;
         }
 
@@ -2214,22 +2223,35 @@
             // --- kill feed ---
             const feed = document.getElementById('killfeed');
             const KF_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></svg>';
-            const msgs = [
-                '<b>UniqueTaha</b> eliminated <em>Lag</em>',
-                '<b>UniqueTaha</b> eliminated <em>Boredom</em>',
-                '<b>UniqueTaha</b> is <em>LIVE</em> on Aparat',
-                '<b>Winner Winner</b> <em>Chicken Dinner</em>'
-            ];
+            const msgs = {
+                live: [
+                    '<b>UniqueTaha</b> is <em>LIVE</em> on Aparat',
+                    '<b>Squad up!</b> <em>UniqueTaha is LIVE</em>'
+                ],
+                offline: [
+                    '<b>UniqueTaha</b> is currently <em>OFFLINE</em>',
+                    '<b>Live session</b> <em>has ended</em>'
+                ],
+                unknown: [
+                    '<b>Live status</b> is <em>unavailable</em>',
+                    '<b>Checking</b> <em>Aparat status</em>'
+                ],
+                checking: [
+                    '<b>Checking</b> <em>Aparat live status</em>'
+                ]
+            };
             let mi = 0;
             function pushKill() {
                 if (document.hidden) return;
                 const el = document.createElement('div');
                 el.className = 'kf';
-                el.innerHTML = KF_ICON + msgs[mi++ % msgs.length];
+                const currentMessages = msgs[liveFeedStatus] || msgs.unknown;
+                el.innerHTML = KF_ICON + currentMessages[mi++ % currentMessages.length];
                 feed.appendChild(el);
                 while (feed.children.length > 3) feed.firstChild.remove();
                 setTimeout(() => el.remove(), 4800);
             }
+            refreshKillFeed = pushKill;
             if (!reduce) {
                 setTimeout(() => { pushKill(); setInterval(pushKill, 5500); }, 1800);
             }
