@@ -1,2 +1,6 @@
-push.log
 run.bat
+push.log
+.wrangler/
+wrangler-account.json
+*.map
+node_modules/

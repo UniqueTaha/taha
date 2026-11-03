@@ -1,14 +1,42 @@
 {
+  "id": "/",
   "name": "Unique Taha | یونیک طاها",
-  "short_name": "Unique Taha",
-  "description": "Official site of Unique Taha, PUBG Mobile streamer",
+  "short_name": "یونیک طاها",
+  "description": "برنامه رسمی یونیک طاها (UniqueTaha)، استریمر پابجی موبایل. لایو آپارات، یوتیوب، اینستاگرام، تلگرام و روبیکا یک‌جا.",
   "lang": "fa",
   "dir": "rtl",
-  "start_url": "/",
+  "start_url": "/?source=app",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#050102",
   "theme_color": "#000000",
+  "categories": ["entertainment", "games", "social"],
+  "prefer_related_applications": false,
   "icons": [
-    { "src": "/logo.png", "sizes": "96x96", "type": "image/png" }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "/screenshot-narrow.png", "sizes": "540x960", "type": "image/png", "form_factor": "narrow", "label": "صفحه اصلی برنامه یونیک طاها" },
+    { "src": "/screenshot-wide.png", "sizes": "1280x720", "type": "image/png", "form_factor": "wide", "label": "نسخه دسکتاپ برنامه یونیک طاها" }
+  ],
+  "shortcuts": [
+    {
+      "name": "لایو در آپارات",
+      "short_name": "لایو",
+      "description": "رفتن به لایو استریم یونیک طاها در آپارات",
+      "url": "/?go=live&source=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "حمایت از یونیک طاها",
+      "short_name": "حمایت",
+      "description": "حمایت مالی از یونیک طاها",
+      "url": "/?go=donate&source=shortcut",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
   ]
 }

@@ -2,12 +2,13 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script>
     (function(){var d=document.documentElement,q=location.search,rm=false;
     try{rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
     if(/[?&]fx=full\b/.test(q)){d.classList.add('fx-full')}else if(rm){d.classList.add('fx-calm')}
     try{if(sessionStorage.getItem('introSeen')&&!/[?&]intro\b/.test(q))d.classList.add('no-intro')}catch(e){}
+    try{if(!d.classList.contains('no-intro')&&!d.classList.contains('fx-calm')){['c130-front.webp','c130-side.webp','c130-rear34.webp'].forEach(function(f){var l=document.createElement('link');l.rel='preload';l.as='image';l.href=f;document.head.appendChild(l)})}}catch(e){}
     setTimeout(function(){var e=document.getElementById('dropIn');if(e&&!window.__fxIntroStarted&&e.parentNode)e.parentNode.removeChild(e)},6000)})();
     </script>
     <noscript><style>.dropin{display:none!important}</style></noscript>
@@ -48,13 +49,17 @@
     <link rel="me" href="https://t.me/Taha_1_99">
     <link rel="me" href="https://rubika.ir/Unique_Taha">
     <meta name="application-name" content="Unique Taha">
-    <meta name="apple-mobile-web-app-title" content="Unique Taha">
+    <meta name="apple-mobile-web-app-title" content="یونیک طاها">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
     <meta name="subject" content="PUBG Mobile streamer from Iran">
     <meta name="geo.region" content="IR">
     <meta name="language" content="Persian">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="96x96" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
     <script type="application/ld+json">
 {
@@ -139,7 +144,7 @@
       "name": "لایو استریم یونیک طاها کجا برگزار می‌شود؟",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "لایو استریم‌ها در آپارات به آدرس aparat.com/uniquetaha برگزار می‌شود. ویدیوهای گیم‌پلی در یوتیوب به آدرس youtube.com/@uniquetaha هم قابل مشاهده است."
+        "text": "لایو استریم‌ها در آپارات به آدرس aparat.com/uniquetaha برگزار می‌شود."
       }
     },
     {
@@ -1970,21 +1975,29 @@
         }
         @keyframes dropinStreak { from { transform: translateY(110vh); } to { transform: translateY(-170px); } }
 
-        /* plane crosses the top of the screen */
-        .dropin-plane { position: absolute; top: 13vh; left: 0; width: 170px; height: 54px; color: #d5d9e3; opacity: 0; animation: dropinFly 1.5s linear both; }
-        @keyframes dropinFly { 0% { opacity: 1; transform: translateX(-25vw); } 100% { opacity: 1; transform: translateX(125vw); } }
-        .dropin-plane svg { display: block; width: 170px; height: 54px; filter: drop-shadow(0 0 10px rgba(255, 42, 54, .55)); }
-        .dropin-trail { position: absolute; right: 100%; top: 25px; width: 38vw; height: 3px; margin-right: -22px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6)); }
-        .dropin-trail::after { content: ''; position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 120, 120, .45)); }
-        .dropin-light { position: absolute; width: 7px; height: 7px; border-radius: 50%; animation: dropinBlink .5s steps(2) infinite; }
-        .dropin-light-r { left: 56px; top: 2px; background: #ff2a36; box-shadow: 0 0 12px 3px #ff2a36; }
-        .dropin-light-g { left: 56px; bottom: 2px; background: #38ff8a; box-shadow: 0 0 12px 3px #38ff8a; animation-delay: .25s; }
+        /* The intro's CSS animations and the JS plane share one clock: nothing moves until the script adds .is-run */
+        .dropin:not(.is-run):not(.is-gone) *, .dropin:not(.is-run):not(.is-gone) *::before, .dropin:not(.is-run):not(.is-gone) *::after { animation-play-state: paused !important; }
+        .dropin-clock { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; animation: dropinClock 8s linear both; }
+        @keyframes dropinClock { from { transform: translateX(0); } to { transform: translateX(1px); } }
+        /* real C-130 Hercules fly-by: three photo sprites (front, side, rear 3/4) + 3D transforms driven by the intro script */
+        .dropin-air { position: absolute; inset: 0; pointer-events: none; overflow: hidden; perspective: 1100px; perspective-origin: 50% 30%; }
+        .dropin-craft { position: absolute; left: 0; top: 0; width: var(--pw, 480px); height: calc(var(--pw, 480px) * .386); opacity: 0; will-change: transform, opacity; }
+        .dropin-craft img { position: absolute; display: block; max-width: none; height: auto; opacity: 0; filter: drop-shadow(0 0 12px rgba(255, 60, 60, .3)) drop-shadow(0 8px 14px rgba(0, 0, 0, .6)); }
+        .dropin-craft .dropin-v-front { left: 4%; top: 50%; width: 92%; transform: translateY(-50%); }
+        .dropin-craft .dropin-v-rear { left: 7%; top: 50%; width: 86%; transform: translateY(-50%); }
+        .dropin-sidegrp { position: absolute; inset: 0; opacity: 0; }
+        .dropin-sidegrp img { left: 0; top: 0; width: 100%; opacity: 1; }
+        .dropin-trail { position: absolute; right: 44%; width: 62vw; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5)); }
+        .dropin-trail-a { top: 53%; } .dropin-trail-b { top: 61%; opacity: .7; }
+        .dropin-prop { position: absolute; top: 56.5%; width: 3.4%; height: 38%; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(222, 226, 236, .5), rgba(222, 226, 236, .2) 55%, transparent 74%); animation: dropinProp .07s linear infinite; }
+        @keyframes dropinProp { 0% { opacity: .75; } 50% { opacity: .4; } 100% { opacity: .7; } }
         @keyframes dropinBlink { 50% { opacity: .15; } }
 
         /* the jumper: logo badge + canopy, anchored at the landing point */
         .dropin-jumper { position: absolute; left: 50%; top: 54%; width: 0; height: 0; animation: dropinJump 2s cubic-bezier(.2, .6, .3, 1) .7s both; }
         @keyframes dropinJump {
-            0%   { opacity: 0; transform: translate(calc(-5vw + 85px), calc(-41vh + 27px)) scale(.28) rotate(20deg); animation-timing-function: cubic-bezier(.55, 0, .95, .55); }
+            0%   { opacity: 0; transform: translate(var(--jx, calc(-5vw + 85px)), var(--jy, calc(-41vh + 27px))) scale(.28) rotate(20deg); animation-timing-function: cubic-bezier(.55, 0, .95, .55); }
             4%   { opacity: 1; }
             45%  { opacity: 1; transform: translate(-1vw, -17vh) scale(.8) rotate(3deg); animation-timing-function: cubic-bezier(.15, .7, .3, 1); }
             100% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0); }
@@ -2133,9 +2146,12 @@
         }
         .supply-alert-dot { width: 9px; height: 9px; border-radius: 50%; background: #ff2a36; box-shadow: 0 0 10px #ff2a36; animation: dropinBlink .5s steps(2) infinite; }
         @keyframes supplyAlertIn { 0% { opacity: 0; transform: translate(-50%, -18px); } 10% { opacity: 1; transform: translate(-50%, 0); } 86% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -10px); } }
-        .supply-plane { position: fixed; top: 7vh; left: 0; z-index: 126; width: 120px; height: 38px; color: #c9ced9; opacity: 0; pointer-events: none; animation: supplyPlane 2.6s linear both; }
-        .supply-plane svg { display: block; width: 120px; height: 38px; filter: drop-shadow(0 0 8px rgba(255, 42, 54, .5)); }
-        @keyframes supplyPlane { 0% { opacity: 1; transform: translateX(-140px); } 100% { opacity: 1; transform: translateX(calc(100vw + 20px)); } }
+        .supply-plane { position: fixed; top: 4.5vh; left: 0; z-index: 126; width: var(--sp-w, 300px); opacity: 0; pointer-events: none; perspective: 900px; animation: supplyPlane 2.6s linear both; }
+        .supply-plane-body { position: relative; display: block; animation: supplyPlaneTilt 2.6s ease-in-out both; }
+        .supply-plane-body img { display: block; width: 100%; height: auto; filter: drop-shadow(0 0 12px rgba(255, 60, 60, .3)) drop-shadow(0 8px 14px rgba(0, 0, 0, .6)); }
+        .supply-plane-body .dropin-trail { width: 34vw; }
+        @keyframes supplyPlane { 0% { opacity: 1; transform: translateX(calc(var(--sp-w, 300px) * -1)); } 100% { opacity: 1; transform: translateX(calc(100vw + 20px)); } }
+        @keyframes supplyPlaneTilt { 0% { transform: rotateY(-14deg) rotateZ(1.5deg) scale(.9); } 50% { transform: rotateY(0) rotateZ(-.8deg) scale(1.04); } 100% { transform: rotateY(13deg) rotateZ(-2deg) scale(.95); } }
 
         .supply {
             position: fixed; top: 0; left: var(--sx, 50%); z-index: 130; width: 100px; margin-left: -50px; padding: 0; background: none; border: 0; cursor: pointer; font: inherit; color: #fff;
@@ -2219,6 +2235,48 @@
         .fx-btn { font: inherit; font-size: .82rem; color: #d9ccf2; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .22); padding: 6px 12px; cursor: pointer; transition: border-color .2s, color .2s, background .2s; }
         .fx-btn:hover { border-color: #ffb21a; color: #fff; background: rgba(255, 178, 26, .1); }
         .fx-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    
+        /* =====================================================================
+           App mode (PWA): notch / home-indicator safe areas, install bar, toast
+           ===================================================================== */
+        html.is-app .footer-hint, html.is-app [data-app="install"] { display: none !important; }
+        html.is-app body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+        html.is-app .container { margin-top: env(safe-area-inset-top, 0px); }
+        @supports (padding: env(safe-area-inset-top)) {
+            .hp-bar { top: env(safe-area-inset-top, 0px); }
+            .compass { top: max(12px, calc(env(safe-area-inset-top, 0px) + 8px)); }
+            .scroll-top { bottom: max(30px, calc(env(safe-area-inset-bottom, 0px) + 16px)); left: max(30px, calc(env(safe-area-inset-left, 0px) + 16px)); }
+            .radar { right: max(18px, calc(env(safe-area-inset-right, 0px) + 12px)); bottom: max(22px, calc(env(safe-area-inset-bottom, 0px) + 12px)); }
+        }
+        .app-install {
+            position: fixed; left: 50%; bottom: max(92px, calc(env(safe-area-inset-bottom, 0px) + 84px)); z-index: 160;
+            width: min(440px, 92vw); display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+            background: rgba(14, 4, 6, .96); border: 1px solid rgba(255, 70, 70, .6); color: #fff;
+            box-shadow: 0 0 30px rgba(229, 0, 15, .35), 0 12px 30px rgba(0, 0, 0, .55);
+            transform: translate(-50%, 24px); opacity: 0; pointer-events: none; transition: transform .35s ease, opacity .35s ease;
+        }
+        .app-install[hidden] { display: none; }
+        .app-install.is-open { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+        .app-install-icon { width: 48px; height: 48px; border-radius: 12px; flex: none; border: 1px solid rgba(255, 70, 70, .5); }
+        .app-install-text { flex: 1; min-width: 0; text-align: right; }
+        .app-install-text strong { display: block; font-size: 1rem; color: #fff; }
+        .app-install-text p { margin: 2px 0 0; font-size: .82rem; line-height: 1.7; color: #d9ccf2; }
+        .app-install-steps { margin: 6px 0 0; padding: 0 18px 0 0; font-size: .82rem; line-height: 1.9; color: #ffd27a; }
+        .app-install-steps[hidden] { display: none; }
+        .app-install-steps svg { width: 14px; height: 14px; vertical-align: -2px; margin: 0 2px; }
+        .app-install-actions { display: flex; flex-direction: column; gap: 6px; flex: none; }
+        .app-install-go, .app-install-later, .app-toast button { font: inherit; font-size: .85rem; font-weight: 700; padding: 7px 14px; cursor: pointer; color: #fff; border: 1px solid rgba(255, 255, 255, .28); background: rgba(255, 255, 255, .06); }
+        .app-install-go, .app-toast button { background: linear-gradient(135deg, var(--red-500, #e5000f), #8a0009); border-color: transparent; }
+        .app-install-go:hover, .app-install-later:hover, .app-install-go:focus-visible, .app-install-later:focus-visible, .app-toast button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+        .app-toast {
+            position: fixed; left: 50%; top: max(60px, calc(env(safe-area-inset-top, 0px) + 56px)); z-index: 170; display: flex; align-items: center; gap: 12px;
+            padding: 10px 14px; background: rgba(14, 4, 6, .96); border: 1px solid rgba(255, 178, 26, .6); color: #fff; font-size: .9rem;
+            transform: translate(-50%, -16px); opacity: 0; pointer-events: none; transition: transform .3s ease, opacity .3s ease;
+        }
+        .app-toast[hidden] { display: none; }
+        .app-toast.is-open { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+        @media (max-width: 420px) { .app-install { flex-wrap: wrap; } .app-install-actions { flex-direction: row; width: 100%; } .app-install-actions button { flex: 1; } }
+        @media (prefers-reduced-motion: reduce) { .app-install, .app-toast { transition: opacity .01s; transform: translate(-50%, 0); } }
     </style>
 </head>
 <body>
@@ -2239,10 +2297,17 @@
                     <i style="left:73%;--d:.48s;--dl:-.34s"></i><i style="left:81%;--d:.35s;--dl:-.16s"></i><i style="left:89%;--d:.41s;--dl:-.02s"></i><i style="left:95%;--d:.38s;--dl:-.24s"></i>
                 </div>
             </div>
-            <div class="dropin-plane">
-                <span class="dropin-trail"></span>
-                <span class="dropin-light dropin-light-r"></span><span class="dropin-light dropin-light-g"></span>
-                <svg viewBox="0 0 170 54" focusable="false"><path d="M8 27c0-3 8-5 20-5h86c20 0 36 3 50 5-14 2-30 5-50 5H28C16 32 8 30 8 27z" fill="currentColor"/><path d="M78 22L52 3h14l36 19z" fill="currentColor"/><path d="M78 32L52 51h14l36-19z" fill="currentColor"/><path d="M16 22L8 9h11l13 13z" fill="currentColor"/><path d="M16 32L8 45h11l13-13z" fill="currentColor"/><rect x="60" y="8" width="9" height="5" rx="2" fill="#8d94a4"/><rect x="60" y="41" width="9" height="5" rx="2" fill="#8d94a4"/><circle cx="150" cy="27" r="2.4" fill="#0b0205" opacity=".55"/></svg>
+            <i class="dropin-clock" aria-hidden="true"></i>
+            <div class="dropin-air" aria-hidden="true">
+                <div class="dropin-craft" id="dropCraft">
+                    <img class="dropin-v-front" src="c130-front.webp" alt="" width="727" height="213" decoding="async">
+                    <div class="dropin-sidegrp">
+                        <span class="dropin-trail dropin-trail-a"></span><span class="dropin-trail dropin-trail-b"></span>
+                        <img class="dropin-v-side" src="c130-side.webp" alt="" width="1280" height="494" decoding="async">
+                        <i class="dropin-prop" style="left:62%"></i><i class="dropin-prop" style="left:69%"></i>
+                    </div>
+                    <img class="dropin-v-rear" src="c130-rear34.webp" alt="" width="727" height="221" decoding="async">
+                </div>
             </div>
             <div class="dropin-target">
                 <span class="dropin-zone"></span><span class="dropin-shock"></span><span class="dropin-shock dropin-shock-2"></span>
@@ -2465,6 +2530,7 @@
                         <button type="button" class="fx-btn" data-fx="intro">▶ ورود دوباره</button>
                         <button type="button" class="fx-btn" data-fx="drop">▼ ایردراپ</button>
                         <button type="button" class="fx-btn" data-fx="radar">◎ مینی‌مپ</button>
+                        <button type="button" class="fx-btn" id="appInstallBtn" data-app="install" hidden>⬇ نصب برنامه</button>
                     </div>
                 </div>
             </div>
@@ -3041,19 +3107,73 @@
 
         /* ================= 1) DROP-IN INTRO ================= */
         var introHTML = '';
+        /* C-130 fly-by: front view approaches, turns into the side view as it passes (the jumper leaves from the rear ramp),
+           then the rear 3/4 view banks away. Position, scale, banking and yaw are computed per frame for a 3D feel. */
+        function makePlane(el) {
+            var craft = el.querySelector('.dropin-craft');
+            if (!craft) { return function () {}; }
+            var front = craft.querySelector('.dropin-v-front'), side = craft.querySelector('.dropin-sidegrp'), rear = craft.querySelector('.dropin-v-rear');
+            var W = window.innerWidth, H = window.innerHeight;
+            var Wp = Math.max(230, Math.min(600, W * 0.46)), Hp = Wp * 0.386;
+            craft.style.setProperty('--pw', Wp + 'px');
+            var P0x = W * 0.44, P0y = H * 0.27;                          // where the jumper leaves the plane at t = 0.7s (rear ramp)
+            var RX = 0.2, RY = 0.66;                                     // ramp position inside the side sprite
+            var cx0 = P0x - (RX - 0.5) * Wp, cy0 = P0y - (RY - 0.5) * Hp, v = W * 0.4;
+            var jump = el.querySelector('.dropin-jumper');
+            if (jump) { jump.style.setProperty('--jx', (P0x - W / 2) + 'px'); jump.style.setProperty('--jy', (P0y - H * 0.54) + 'px'); }
+            function lerp(a, b, u) { return a + (b - a) * u; }
+            function c01(u) { return Math.min(Math.max(u, 0), 1); }
+            function eo(u) { u = c01(u); return 1 - Math.pow(1 - u, 3); }
+            function ei(u) { u = c01(u); return u * u * u; }
+            return function (t) {
+                if (t > 2.7) { craft.style.opacity = '0'; return; }
+                var x, y, s, rz, ry;
+                if (t < 0.5) {                                           // 1) front view comes in from far away
+                    var u = eo(t / 0.5);
+                    x = lerp(W * 0.3, cx0 + v * (0.5 - 0.7), u); y = lerp(H * 0.09, cy0, u); s = lerp(0.18, 0.96, u); rz = lerp(6, 0, u); ry = 0;
+                } else if (t < 1.5) {                                    // 2) side view passes the camera
+                    x = cx0 + v * (t - 0.7); y = cy0 + 5 * Math.sin((t - 0.5) * 2.4); s = lerp(0.96, 1.04, c01((t - 0.5) / 0.6)) - 0.1 * c01((t - 1.1) / 0.4); rz = -1.2 * Math.sin((t - 0.5) * 1.6); ry = lerp(-11, 9, c01((t - 0.5) / 1.0));
+                } else {                                                 // 3) rear 3/4 view banks away to the right
+                    var w = c01((t - 1.5) / 1.1);
+                    x = cx0 + v * (t - 0.7) + ei(w) * W * 0.14; y = cy0 - ei(w) * H * 0.18; s = lerp(0.94, 0.34, eo(w)); rz = lerp(-1, -9, eo(w)); ry = lerp(9, 30, eo(w));
+                }
+                craft.style.transform = 'translate3d(' + (x - Wp / 2).toFixed(1) + 'px,' + (y - Hp / 2).toFixed(1) + 'px,0) rotateZ(' + rz.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale(' + s.toFixed(3) + ')';
+                craft.style.opacity = String(c01(t / 0.12));
+                var of = 1 - c01((t - 0.42) / 0.18), os = c01((t - 0.4) / 0.2) * (1 - c01((t - 1.5) / 0.22)), orr = c01((t - 1.5) / 0.22) * (1 - c01((t - 2.1) / 0.5));
+                front.style.opacity = String(of); side.style.opacity = String(os); rear.style.opacity = String(orr);
+            };
+        }
         function playIntro() {
             var el = document.getElementById('dropIn');
             if (!el) { markIntroDone(); return; }
             window.__fxIntroStarted = true;
             var done = false, timers = [], raf = 0;
             var altEl = el.querySelector('.dropin-alt'), statusEl = el.querySelector('.dropin-status');
+            var plane = calm ? null : makePlane(el);
             function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
             function status(text, cls) { if (statusEl) { statusEl.textContent = text; statusEl.className = 'dropin-status' + (cls ? ' ' + cls : ''); } }
             function ease(x) { return 1 - Math.pow(1 - Math.min(Math.max(x, 0), 1), 3); }
             var t0 = now();
+            el.classList.add('is-run');
+            // One clock for everything: the plane, the HUD and the CSS animations (jumper, chute, ...) read the same animation time,
+            // so a slow first frame can never separate the jumper from the plane's rear ramp.
+            var clockAnim = null;
+            try { var cl = el.querySelector('.dropin-clock'), list = cl && cl.getAnimations ? cl.getAnimations() : []; clockAnim = list.length ? list[0] : null; } catch (e) { clockAnim = null; }
+            function clockT() {
+                if (clockAnim && clockAnim.currentTime !== null && clockAnim.currentTime !== undefined) { return Number(clockAnim.currentTime) / 1000; }
+                return (now() - t0) / 1000;
+            }
+            var stage = 0;
             function tick() {
                 if (done) { return; }
-                var t = (now() - t0) / 1000, a;
+                var t = clockT(), a;
+                if (!calm) {
+                    if (t >= 0.7 && stage < 1) { stage = 1; status('FREEFALL', 'is-fall'); }
+                    if (t >= 1.6 && stage < 2) { stage = 2; status('CHUTE OPEN', 'is-open'); }
+                    if (t >= 2.7 && stage < 3) { stage = 3; status('LANDED', 'is-land'); }
+                    if (t >= 3.75) { finish(); return; }
+                }
+                if (plane) { plane(t); }
                 if (t < 0.7) { a = 1200; } else if (t < 1.6) { a = 1200 - 920 * ease((t - 0.7) / 0.9); } else if (t < 2.7) { a = 280 * (1 - ease((t - 1.6) / 1.1)); } else { a = 0; }
                 if (altEl) { altEl.textContent = String(Math.max(0, Math.round(a))); }
                 raf = requestAnimationFrame(tick);
@@ -3077,11 +3197,9 @@
             } else {
                 if (altEl) { altEl.textContent = '1200'; }
                 status('JUMP READY', 'is-ready');
-                at(700, function () { status('FREEFALL', 'is-fall'); });
-                at(1600, function () { status('CHUTE OPEN', 'is-open'); });
-                at(2700, function () { status('LANDED', 'is-land'); });
+                if (plane) { plane(0); }
                 raf = requestAnimationFrame(tick);
-                at(3750, finish);
+                at(5200, finish);                                  // safety net; normally the shared clock ends it at 3.75s
             }
             var skip = el.querySelector('.dropin-skip');
             if (skip) { skip.addEventListener('click', function (e) { e.stopPropagation(); finish(); }); }
@@ -3186,7 +3304,9 @@
                 'تو این جعبه یه دنیا انرژی بود! اگه از لایوها لذت می‌بری، با حمایتت کمک کن استریم ادامه پیدا کنه.',
                 'ایردراپ مخصوص تو! لینک سایت رو برای دوستات بفرست تا تیمت کامل بشه.'
             ];
-            var PLANE = '<svg viewBox="0 0 170 54" aria-hidden="true" focusable="false"><path d="M8 27c0-3 8-5 20-5h86c20 0 36 3 50 5-14 2-30 5-50 5H28C16 32 8 30 8 27z" fill="currentColor"/><path d="M78 22L52 3h14l36 19z" fill="currentColor"/><path d="M78 32L52 51h14l36-19z" fill="currentColor"/><path d="M16 22L8 9h11l13 13z" fill="currentColor"/><path d="M16 32L8 45h11l13-13z" fill="currentColor"/></svg>';
+            var PLANE = '<span class="supply-plane-body"><span class="dropin-trail dropin-trail-a"></span><span class="dropin-trail dropin-trail-b"></span>' +
+                '<img src="c130-side.webp" alt="" width="1280" height="494" decoding="async"><i class="dropin-prop" style="left:62%"></i><i class="dropin-prop" style="left:69%"></i></span>';
+            var rampDrop = 0;
             var CRATE =
                 '<span class="supply-beam" aria-hidden="true"></span><span class="supply-rays" aria-hidden="true"></span>' +
                 '<span class="supply-smoke" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
@@ -3217,22 +3337,26 @@
                 alertEl.setAttribute('aria-hidden', 'true');
                 alertEl.innerHTML = '<span class="supply-alert-dot"></span><span>AIRDROP INCOMING</span>';
                 document.body.appendChild(alertEl);
+                if (!calm) { try { new Image().src = 'c130-side.webp'; } catch (e) {} }
                 setTimeout(function () { remove(alertEl); release(x); }, calm ? 1700 : 2000);
             }
             function release(x) {
                 if (calm) { spawn(x, true); return; }
-                var W = window.innerWidth, flight = 2600;
+                var W = window.innerWidth, H = window.innerHeight, flight = 2600;
+                var pw = Math.round(Math.max(190, Math.min(340, W * 0.26)));
                 var plane = document.createElement('div');
                 plane.className = 'supply-plane';
                 plane.setAttribute('aria-hidden', 'true');
+                plane.style.setProperty('--sp-w', pw + 'px');
                 plane.innerHTML = PLANE;
+                rampDrop = Math.round(H * 0.045 + pw * 0.386 * 0.66 - 8);       // the crate starts at the plane's rear ramp
                 document.body.appendChild(plane);
-                setTimeout(function () { spawn(x, false); }, Math.max(250, ((x + 80) / (W + 160)) * flight));
+                setTimeout(function () { spawn(x, false); }, Math.max(250, ((x + 0.8 * pw) / (W + pw + 20)) * flight));
                 setTimeout(function () { remove(plane); }, flight + 250);
             }
             function spawn(x, instant) {
                 var H = window.innerHeight, wide = window.innerWidth >= 700;
-                var land = Math.max(70, H - 155 - (wide ? 24 : 72)), start = Math.round(H * 0.07) + 18;
+                var land = Math.max(70, H - 155 - (wide ? 24 : 72)), start = (!instant && rampDrop) ? rampDrop : Math.round(H * 0.07) + 18;
                 var c = document.createElement('button');
                 c.type = 'button';
                 c.className = 'supply' + (instant ? ' landed' : '');
@@ -3388,6 +3512,122 @@
             else if (e.code === 'KeyD' && api.supplyNow) { api.supplyNow(); }
             else if (e.code === 'KeyI') { replayIntro(); }
         });
+    })();
+    </script>
+    <!-- App install bar (shown by the PWA script; never in the installed app) -->
+    <aside class="app-install" id="appInstall" role="dialog" aria-labelledby="appInstallTitle" hidden>
+        <img class="app-install-icon" src="icon-192.png" alt="" width="48" height="48">
+        <div class="app-install-text">
+            <strong id="appInstallTitle">نصب برنامه یونیک طاها</strong>
+            <p id="appInstallDesc">مثل یک اپ روی گوشیت نصب می‌شه: آیکون خودش، تمام‌صفحه و حتی بدون اینترنت.</p>
+            <ol class="app-install-steps" id="appInstallSteps" hidden></ol>
+        </div>
+        <div class="app-install-actions">
+            <button type="button" class="app-install-go" id="appInstallGo">نصب</button>
+            <button type="button" class="app-install-later" id="appInstallLater">بعداً</button>
+        </div>
+    </aside>
+    <div class="app-toast" id="appToast" role="status" hidden><span>نسخه جدید برنامه آماده است.</span><button type="button" id="appToastBtn">بروزرسانی</button></div>
+
+    <script>
+    /* PWA: service worker, install prompt (Android/desktop), iOS instructions, app shortcuts */
+    (function () {
+        'use strict';
+        var root = document.documentElement;
+        function mq(q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } }
+        var standalone = mq('(display-mode: standalone)') || mq('(display-mode: fullscreen)') || mq('(display-mode: minimal-ui)') ||
+            window.navigator.standalone === true || (document.referrer || '').indexOf('android-app://') === 0;
+        if (standalone) root.classList.add('is-app');
+
+        var ua = navigator.userAgent || '';
+        var isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var bar = document.getElementById('appInstall'), go = document.getElementById('appInstallGo'), later = document.getElementById('appInstallLater');
+        var btn = document.getElementById('appInstallBtn'), desc = document.getElementById('appInstallDesc'), steps = document.getElementById('appInstallSteps');
+        var toast = document.getElementById('appToast'), toastBtn = document.getElementById('appToastBtn');
+        var deferred = null, autoTimer = null, SHARE = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v12M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var COOLDOWN = 7 * 24 * 3600 * 1000;
+
+        function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+        function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+        function snoozed() { var v = parseInt(lsGet('appInstallLater') || '0', 10); return v && Date.now() - v < COOLDOWN; }
+        function installed() { return lsGet('appInstalled') === '1'; }
+        function whenFree(cb, extraMs) {
+            var t0 = Date.now();
+            (function poll() {
+                var busy = window.__fxBlocking || document.getElementById('dropIn') || document.hidden;
+                if (!busy && Date.now() - t0 >= (extraMs || 0)) { cb(); return; }
+                if (Date.now() - t0 > 120000) return;
+                setTimeout(poll, 500);
+            })();
+        }
+        function setMode() {
+            steps.hidden = true; steps.innerHTML = '';
+            if (deferred) { desc.textContent = 'مثل یک اپ روی گوشیت نصب می‌شه: آیکون خودش، تمام‌صفحه و حتی بدون اینترنت.'; go.hidden = false; return; }
+            go.hidden = true; steps.hidden = false;
+            if (isIOS) {
+                desc.textContent = 'تو آیفون و آیپد نصب از همین مرورگر Safari انجام می‌شه:';
+                steps.innerHTML = '<li>دکمه Share ' + SHARE + ' (مربع با فلش رو به بالا) پایین صفحه را بزن.</li><li>گزینه «Add to Home Screen» را انتخاب کن.</li><li>روی «Add» بزن؛ آیکون برنامه روی صفحه اصلی میاد.</li>';
+            } else {
+                desc.textContent = 'نصب از منوی مرورگر:';
+                steps.innerHTML = '<li>منوی مرورگر (⋮ یا ⋯) را باز کن.</li><li>«Install app» یا «Add to Home screen» را بزن.</li>';
+            }
+        }
+        function open() {
+            if (standalone) return;
+            setMode(); bar.hidden = false;
+            setTimeout(function () { bar.classList.add('is-open'); }, 30);
+        }
+        function close(snooze) {
+            bar.classList.remove('is-open');
+            setTimeout(function () { bar.hidden = true; }, 380);
+            if (snooze) lsSet('appInstallLater', String(Date.now()));
+        }
+        function scheduleAuto() {
+            if (standalone || installed() || snoozed() || autoTimer) return;
+            autoTimer = true;
+            whenFree(function () { if (!standalone && !installed() && !snoozed()) open(); }, deferred ? 12000 : 18000);
+        }
+
+        if (!standalone) {
+            btn.hidden = false;
+            btn.addEventListener('click', function () { open(); });
+            window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; scheduleAuto(); });
+            window.addEventListener('appinstalled', function () { deferred = null; lsSet('appInstalled', '1'); close(false); btn.hidden = true; });
+            go.addEventListener('click', function () {
+                if (!deferred) { close(false); return; }
+                var d = deferred; deferred = null;
+                try { d.prompt(); (d.userChoice || Promise.resolve()).then(function () { close(true); }); } catch (e) { close(true); }
+            });
+            later.addEventListener('click', function () { close(true); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !bar.hidden && bar.classList.contains('is-open') && !window.__fxBlocking) close(true); });
+            if (isIOS) scheduleAuto();
+            if (/[?&]install\b/.test(location.search)) whenFree(open, 0);
+        }
+
+        /* service worker (needs https or localhost) */
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+            var hadController = !!navigator.serviceWorker.controller;
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+            });
+            navigator.serviceWorker.addEventListener('controllerchange', function () {
+                if (!hadController) { hadController = true; return; }
+                toast.hidden = false; setTimeout(function () { toast.classList.add('is-open'); }, 30);
+            });
+            toastBtn.addEventListener('click', function () { location.reload(); });
+        }
+
+        /* app shortcuts: long-press the icon -> ?go=live / ?go=donate */
+        var m = /[?&]go=(live|donate)\b/.exec(location.search);
+        if (m) {
+            whenFree(function () {
+                try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+                var el = m[1] === 'live' ? document.getElementById('liveCta') : document.querySelector('a.vpn-link-btn[href*="reymit.ir"]');
+                if (el) el.click();
+            }, 300);
+        }
+
+        window.uniqueTahaApp = { showInstall: open, isStandalone: function () { return standalone; } };
     })();
     </script>
 </body>
