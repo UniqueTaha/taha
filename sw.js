@@ -1,16 +1,18 @@
 /* Unique Taha - service worker (offline support + installable app).
    Change VERSION whenever you want every phone to drop its old cache. */
 'use strict';
-const VERSION = '2026-11-02-1';
+const VERSION = '2026-11-05-3b11031d';   // rewritten by bump-version.py
 const CACHE = 'uniquetaha-' + VERSION;
-const CORE = ['/', '/index.html', '/site.webmanifest', '/logo.png', '/favicon.ico',
-              '/icon-192.png', '/icon-512.png', '/icon-maskable-512.png', '/apple-touch-icon.png',
-              '/c130-front.webp', '/c130-side.webp', '/c130-rear34.webp'];
+/* BUMP:ASSETS */
+const ASSETS = ['/style.css?v=1923b770', '/app.js?v=e71be902', '/fx.js?v=cebaf90d', '/pwa.js?v=4a5fe439'];
+/* /BUMP */
+// Only what the page needs to start offline. Big images (sprites, install icons) are cached the first time they are used.
+const CORE = ['/', '/index.html', '/site.webmanifest', '/logo.webp', '/favicon-32.png', '/app-icon.webp'].concat(ASSETS);
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE)
-            .then((cache) => Promise.all(CORE.map((url) => cache.add(new Request(url, { cache: 'reload' })).catch(() => null))))
+            .then((cache) => Promise.all(CORE.map((url) => cache.add(url).catch(() => null))))
             .then(() => self.skipWaiting())
     );
 });
