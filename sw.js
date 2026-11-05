@@ -1,7 +1,7 @@
 /* Unique Taha - service worker (offline support + installable app).
    Change VERSION whenever you want every phone to drop its old cache. */
 'use strict';
-const VERSION = '2026-11-05-3b11031d';   // rewritten by bump-version.py
+const VERSION = '2026-11-05-3b11031d-fast';   // rewritten by bump-version.py
 const CACHE = 'uniquetaha-' + VERSION;
 /* BUMP:ASSETS */
 const ASSETS = ['/style.css?v=1923b770', '/app.js?v=e71be902', '/fx.js?v=cebaf90d', '/pwa.js?v=4a5fe439'];
@@ -56,7 +56,7 @@ async function handleNavigation(event) {
     if (!cached) return network.catch(() => offlinePage());
     return Promise.race([
         network,
-        new Promise((resolve) => setTimeout(() => resolve(cached), 3500))
+        new Promise((resolve) => setTimeout(() => resolve(cached), 800))
     ]).catch(() => cached);
 }
 

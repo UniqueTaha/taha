@@ -41,12 +41,13 @@
             }
         }
         function open() {
-            if (standalone) return;
+            if (standalone || !bar) return;
             var ic = bar.querySelector('img[data-src]'); if (ic && !ic.getAttribute('src')) { ic.src = ic.getAttribute('data-src'); }
             setMode(); bar.hidden = false;
             setTimeout(function () { bar.classList.add('is-open'); }, 30);
         }
         function close(snooze) {
+            if (!bar) return;
             bar.classList.remove('is-open');
             setTimeout(function () { bar.hidden = true; }, 380);
             if (snooze) lsSet('appInstallLater', String(Date.now()));
@@ -58,17 +59,25 @@
         }
 
         if (!standalone) {
-            btn.hidden = false;
-            btn.addEventListener('click', function () { open(); });
+            if (btn) {
+                btn.hidden = false;
+                btn.addEventListener('click', function () { open(); });
+            }
             window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; scheduleAuto(); });
-            window.addEventListener('appinstalled', function () { deferred = null; lsSet('appInstalled', '1'); close(false); btn.hidden = true; });
-            go.addEventListener('click', function () {
-                if (!deferred) { close(false); return; }
-                var d = deferred; deferred = null;
-                try { d.prompt(); (d.userChoice || Promise.resolve()).then(function () { close(true); }); } catch (e) { close(true); }
-            });
-            later.addEventListener('click', function () { close(true); });
-            document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !bar.hidden && bar.classList.contains('is-open') && !window.__fxBlocking) close(true); });
+            if (btn) {
+                window.addEventListener('appinstalled', function () { deferred = null; lsSet('appInstalled', '1'); close(false); btn.hidden = true; });
+            }
+            if (go) {
+                go.addEventListener('click', function () {
+                    if (!deferred) { close(false); return; }
+                    var d = deferred; deferred = null;
+                    try { d.prompt(); (d.userChoice || Promise.resolve()).then(function () { close(true); }); } catch (e) { close(true); }
+                });
+            }
+            if (later) { later.addEventListener('click', function () { close(true); }); }
+            if (bar) {
+                document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !bar.hidden && bar.classList.contains('is-open') && !window.__fxBlocking) close(true); });
+            }
             if (isIOS) scheduleAuto();
             if (/[?&]install\b/.test(location.search)) whenFree(open, 0);
         }

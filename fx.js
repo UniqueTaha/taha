@@ -63,9 +63,15 @@
         }
         function playIntro() {
             var el = document.getElementById('dropIn');
-            // the three aircraft sprites are downloaded only now (returning visitors and calm mode never fetch them)
-            if (!calm) { Array.prototype.forEach.call(el.querySelectorAll('img[data-src]'), function (im) { im.src = im.getAttribute('data-src'); }); }
             if (!el) { markIntroDone(); return; }
+            // the three aircraft sprites are downloaded only now (returning visitors and calm mode never fetch them)
+            if (!calm) {
+                Array.prototype.forEach.call(el.querySelectorAll('img[data-src]'), function (im) {
+                    if (!im || !im.getAttribute) { return; }
+                    var src = im.getAttribute('data-src');
+                    if (src && !im.getAttribute('src')) { im.setAttribute('src', src); }
+                });
+            }
             window.__fxIntroStarted = true;
             var done = false, timers = [], raf = 0;
             var altEl = el.querySelector('.dropin-alt'), statusEl = el.querySelector('.dropin-status');

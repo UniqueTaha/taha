@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <script>
-    (function(){var d=document.documentElement,q=location.search,rm=false;
+    (function(){var d=document.documentElement,q=location.search,rm=false,introTest=/[?&]intro\b/.test(q);
     try{rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
     if(/[?&]fx=full\b/.test(q)){d.classList.add('fx-full')}else if(rm){d.classList.add('fx-calm')}
-    try{var n=navigator,c=n.connection||{},m=/[?&]lite(?:=([01]))?(?:&|$)/.exec(q);if(m?m[1]!=='0':((n.hardwareConcurrency&&n.hardwareConcurrency<=4)||(n.deviceMemory&&n.deviceMemory<=2)||c.saveData||/(^|-)(2g|3g)$/.test(c.effectiveType||'')))d.classList.add('fx-lite')}catch(e){}
-    try{if(sessionStorage.getItem('introSeen')&&!/[?&]intro\b/.test(q))d.classList.add('no-intro')}catch(e){}
+    try{var n=navigator,c=n.connection||{},m=/[?&]lite(?:=([01]))?(?:&|$)/.exec(q);if(m?m[1]!=='0':((n.hardwareConcurrency&&n.hardwareConcurrency<=4)||(n.deviceMemory&&n.deviceMemory<=2)||c.saveData||/(^|-)(2g|3g)$/.test(c.effectiveType||'')))d.classList.add('fx-lite');if(!introTest&&(c.saveData||/(^|-)(2g|3g)$/.test(c.effectiveType||'')))d.classList.add('no-intro')}catch(e){}
+    try{if(sessionStorage.getItem('introSeen')&&!introTest)d.classList.add('no-intro')}catch(e){}
     try{if(!d.classList.contains('no-intro')&&!d.classList.contains('fx-calm')){['c130-front.webp','c130-side.webp','c130-rear34.webp'].forEach(function(f){var l=document.createElement('link');l.rel='preload';l.as='image';l.href=f;document.head.appendChild(l)})}}catch(e){}
     setTimeout(function(){var e=document.getElementById('dropIn');if(e&&!window.__fxIntroStarted&&e.parentNode)e.parentNode.removeChild(e)},6000)})();
     </script>
@@ -232,7 +232,7 @@
                         <path d="M85 6V66M85 6C60 12 40 34 36 66M85 6c25 6 45 28 49 60" stroke="rgba(0,0,0,.35)" stroke-width="1.4" fill="none"/>
                         <path d="M6 66L85 112M26 66L85 112M46 66L85 112M65 66L85 112M85 66V112M105 66L85 112M124 66L85 112M144 66L85 112M164 66L85 112" stroke="rgba(255,255,255,.55)" stroke-width="1" fill="none"/>
                     </svg>
-                    <div class="dropin-badge"><img src="logo.webp" alt="" width="92" height="92"></div>
+                    <div class="dropin-badge"><img src="logo.webp" alt="" width="92" height="92" fetchpriority="high"></div>
                 </div>
             </div>
             <div class="dropin-dust"></div>
@@ -257,7 +257,7 @@
     <main class="container">
         <header class="header">
             <svg class="reticle" viewBox="0 0 400 400" aria-hidden="true" focusable="false"><circle cx="200" cy="200" r="120"/><circle cx="200" cy="200" r="170" stroke-dasharray="4 10"/><path d="M200 8v64M200 328v64M8 200h64M328 200h64"/></svg>
-            <h1><img class="site-logo" src="logo.webp" alt="لوگوی یونیک طاها" width="96" height="96"><span class="site-title"><span class="site-name">Unique Taha</span><span class="site-name-fa" lang="fa"></span></span></h1>
+            <h1><img class="site-logo" src="logo.webp" alt="لوگوی یونیک طاها" width="96" height="96" fetchpriority="high"><span class="site-title"><span class="site-name">Unique Taha</span><span class="site-name-fa" lang="fa"></span></span></h1>
             <p class="subtitle">استریمر پابجی موبایل</p>
             <p class="tagline">پخش زنده و ویدیوهای PUBG Mobile در آپارات و یوتیوب؛ همهٔ شبکه‌های رسمی یونیک طاها در یک‌جا.</p>
             <ul class="hud-chips">
@@ -405,10 +405,6 @@
             <div class="faq-item">
                 <h3>چطور از یونیک طاها حمایت کنم؟</h3>
                 <p>از بخش حمایت مالی (دونیت) در همین سایت می‌توانید با هر مبلغی حمایت کنید. همچنین دیدن لایوها، دنبال کردن صفحات و اشتراک‌گذاری ویدیوها هم کمک بزرگی است.</p>
-            </div>
-            <div class="faq-item">
-                <h3>یونیک تاها یا Unique Taha همان یونیک طاها است؟</h3>
-                <p>بله. «یونیک طاها»، «یونیک تاها»، «Unique Taha»، «UniqueTaha» و «unique__taha» همگی املاهای مختلف نام یک نفر هستند؛ استریمر پابجی موبایلی که لایو و گیم‌پلی‌هایش را در آپارات و یوتیوب منتشر می‌کند.</p>
             </div>
             <div class="faq-item">
                 <h3>آیا سایت رسمی یونیک طاها همین است؟</h3>
